@@ -8,7 +8,7 @@ A PowerShell script that mounts an ISO, launches an application, and unmounts th
 ## Requirements
 
 - Windows 10/11
-- PowerShell, probably 5.1+ (not sure)
+- PowerShell version 5.1+
 - Permission to mount/unmount disk images and change drive letters
 
 

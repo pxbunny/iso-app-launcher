@@ -17,10 +17,6 @@ if (-not (Test-Path $IsoPath -PathType Leaf)) {
     throw "ISO file not found: $IsoPath"
 }
 
-if (-not (Test-Path $ExePath -PathType Leaf)) {
-    throw "EXE file not found: $ExePath"
-}
-
 $diskImage = $null
 
 try {
@@ -40,6 +36,10 @@ try {
 
         $partition = Get-Partition -DriveLetter $originalLetter -ErrorAction Stop
         Set-Partition -InputObject $partition -NewDriveLetter $driveLetterUpper -ErrorAction Stop
+    }
+
+    if (-not (Test-Path $ExePath -PathType Leaf)) {
+        throw "EXE file not found: $ExePath"
     }
 
     Write-Host "Launching: $ExePath"
