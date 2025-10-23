@@ -31,9 +31,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 ## One-click launch (shortcut)
 
 1. Right-click the Desktop → **New** → **Shortcut**
-2. In the **Type the location of the item**, paste (and update parameters):
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\Scripts\MountIsoAndRun.ps1" -IsoPath "D:\ISOs\mydisc.iso" -ExePath "C:\Program Files\MyApp\MyApp.exe" -DriveLetter "I"
-```
-4. Click **Next**, name the shortcut file, and **Finish**.
-5. (Optional) Change icon (**Properties** → **Shortcut** → **Change Icon...**)
+2. In the **Type the location of the item**, paste (update paths/letter):
+   ```powershell
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\Scripts\MountIsoAndRun.ps1" -IsoPath "D:\ISOs\mydisc.iso" -ExePath "C:\Program Files\MyApp\MyApp.exe" -DriveLetter "I"
+   ```
+3. Click **Next**, name the shortcut file, and **Finish**.
+4. (Optional) Right-click the shortcut → **Properties**:
+   - **Advanced…** → **Run as administrator** (if required by your system).
+   - **Change Icon…** to pick your app’s icon.
+   - **Run:** → **Minimized**
