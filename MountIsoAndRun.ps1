@@ -23,7 +23,7 @@ try {
     Write-Host "Mounting ISO: $IsoPath"
 
     $diskImage = Mount-DiskImage -ImagePath $IsoPath -PassThru -ErrorAction Stop
-    $volume = Get-Volume -DiskImage $diskImage -ErrorAction Stop
+    $volume    = Get-Volume -DiskImage $diskImage -ErrorAction Stop
 
     if (-not $volume) { throw "Could not read the ISO volume." }
 
@@ -36,6 +36,7 @@ try {
 
         $partition = Get-Partition -DriveLetter $originalLetter -ErrorAction Stop
         Set-Partition -InputObject $partition -NewDriveLetter $driveLetterUpper -ErrorAction Stop
+        Start-Sleep -Milliseconds 200
     }
 
     if (-not (Test-Path $ExePath -PathType Leaf)) {
