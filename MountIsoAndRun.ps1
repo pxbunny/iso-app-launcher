@@ -51,6 +51,7 @@ try {
 }
 catch {
     Write-Error "Error: $($_.Exception.Message)"
+    cmd /c "pause"
 }
 finally {
     if (-not ($diskImage)) { Exit }
