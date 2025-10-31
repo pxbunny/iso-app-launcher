@@ -28,6 +28,7 @@ try {
     if (-not $volume) { throw "Could not read the ISO volume." }
 
     $driveLetterUpper = $DriveLetter.ToUpper()
+    Start-Sleep -Milliseconds 500
 
     if ($driveLetterUpper -ne $volume.DriveLetter) {
         if (Test-Path "$driveLetterUpper`:\") {
@@ -36,7 +37,6 @@ try {
 
         $partition = Get-Partition -DriveLetter $originalLetter -ErrorAction Stop
         Set-Partition -InputObject $partition -NewDriveLetter $driveLetterUpper -ErrorAction Stop
-        Start-Sleep -Milliseconds 200
     }
 
     if (-not (Test-Path $ExePath -PathType Leaf)) {
