@@ -57,6 +57,8 @@ try {
         $mountedDriveLetter = $targetDriveLetter
     }
 
+    Write-Host "Using drive letter: $mountedDriveLetter`:"
+
     $resolvedExePath = if ([System.IO.Path]::IsPathRooted($ExePath)) {
         $ExePath
     } else {
@@ -67,16 +69,16 @@ try {
         throw "EXE file not found: $resolvedExePath"
     }
 
-    Write-Host "Launching: $resolvedExePath"
+    Write-Host "Launching executable: $resolvedExePath"
     Write-Host "Waiting for the application to exit..."
 
     $process = Start-Process -FilePath $resolvedExePath -PassThru -Wait -ErrorAction Stop
 
     $launchExitCode = $process.ExitCode
-    Write-Host "Process finished with exit code: $launchExitCode"
+    Write-Host "Application finished with exit code: $launchExitCode"
 }
 catch {
-    Write-Error "Error: $($_.Exception.Message)"
+    Write-Error "Failure: $($_.Exception.Message)"
     $launchExitCode = 1
 }
 finally {
@@ -84,7 +86,7 @@ finally {
         try {
             Write-Host "Unmounting ISO..."
             Dismount-DiskImage -ImagePath $IsoPath -ErrorAction Stop -Confirm:$false | Out-Null
-            Write-Host "Done!"
+            Write-Host "ISO unmounted."
         } catch {
             Write-Warning "Could not unmount the ISO: $($_.Exception.Message)"
         }
