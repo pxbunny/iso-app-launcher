@@ -8,8 +8,6 @@ param(
     [ValidateNotNullOrEmpty()]
     [string]$ExePath,
 
-    [Parameter(Mandatory)]
-    [ValidatePattern('^[A-Za-z]$')]
     [string]$DriveLetter
 )
 
@@ -18,6 +16,10 @@ $launchExitCode        = $null
 
 if (-not (Test-Path $IsoPath -PathType Leaf)) {
     throw "ISO file not found: $IsoPath"
+}
+
+if ($DriveLetter -and $DriveLetter -notmatch '^[A-Za-z]$') {
+    throw "DriveLetter must be a single letter (A-Z)."
 }
 
 $diskImage = $null
@@ -35,17 +37,24 @@ try {
 
     if (-not $mountedDriveLetter) { throw "Mounted ISO has no assigned drive letter." }
 
-    $driveLetterUpper = $DriveLetter.ToUpper()
+    $targetDriveLetter = if ($DriveLetter) {
+        $DriveLetter.ToUpper()
+    } else {
+        $mountedDriveLetter
+    }
+
     Start-Sleep -Milliseconds 500
 
-    if ($driveLetterUpper -ne $mountedDriveLetter) {
-        if (Test-Path "$driveLetterUpper`:\") {
-            throw "Drive letter $driveLetterUpper`: is already in use."
+    if ($DriveLetter -and $targetDriveLetter -ne $mountedDriveLetter) {
+        if (Test-Path "$targetDriveLetter`:\") {
+            throw "Drive letter $targetDriveLetter`: is already in use."
         }
 
         $partition = Get-Partition -DriveLetter $mountedDriveLetter -ErrorAction Stop
-        Set-Partition -InputObject $partition -NewDriveLetter $driveLetterUpper -ErrorAction Stop | Out-Null
-        $mountedDriveLetter = $driveLetterUpper
+        Set-Partition -InputObject $partition -NewDriveLetter $targetDriveLetter -ErrorAction Stop | Out-Null
+        $mountedDriveLetter = $targetDriveLetter
+    } else {
+        $mountedDriveLetter = $targetDriveLetter
     }
 
     $resolvedExePath = if ([System.IO.Path]::IsPathRooted($ExePath)) {
